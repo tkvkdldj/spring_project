@@ -1,8 +1,10 @@
 package com.welcomeshop.www;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,10 +20,67 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-
+//md5 : 회원가입, 로그인, 패스워드 변경, 1:1문의, 자유게시판, 상품구매.....
 @Controller
-public class web_Controller {
+public class web_Controller extends md5_pass{
 	PrintWriter pw = null;
+	
+	@Resource(name = "userselect")
+	private user_select us;
+	
+	//DAO를 쓰고싶다면 => @ModelAttribute
+	//이름과 이메일, 정보 두 개만 가져오고 싶다면 => DAO 없이 사용시 : 자료형 객체 or @RequestParam을 이용해서 사용(null로 날아왔을 때 조건처리하기 편함)  
+	@PostMapping("/idsearch.do")
+	public String idsearch(String[] uname, String uemail, HttpServletResponse res) throws Exception { //아이디 찾기
+		res.setContentType("text/html;charset=utf-8");
+		
+		this.pw = res.getWriter();
+		//null로 날아오면 에러나니 조건 걸어야함
+		try {
+			if(uname[0] == null || uemail == null) {
+				this.pw.print("<script>"
+						+ "alert('올바른 접근 방식이 아닙니다.');"
+						+ "history.go(-1);"
+						+ "</script>");
+			}
+			else {
+				ArrayList<Object> onedata = us.search_id(uname[0], uemail); 
+				
+			}
+		}
+		catch(Exception e) {
+			this.pw.print("<script>"
+					+ "alert('Database 문제로 인하여 해당 정보가 확인 되지 않습니다.');"
+					+ "history.go(-1);"
+					+ "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
+		
+		return null;
+	}
+	
+	@PostMapping("/passmodify.do")
+	public String passmodify() { //패스워드 변경
+		return null;
+	}
+	
+	/*
+	이제는 이런 식으로 쓰는 것이 아니라 md5_pass를 abstract로 바꾸고 여기에 extends함
+	(둘 중 뭘로 쓸지는 개발자맘이지만 Resource는 조금 불편함->모듈에 Repository 꼭 넣어줘야함)
+	
+	@Resource(name = "md5pass") //Java Build path에 server runtime을 추가해야 나옴
+	private md5_pass md;
+	*/
+	//패스워드 변경 여부를 체크(MD5)
+	@GetMapping("/passwd.do")
+	public String passwd() {
+		String pwd = "a1234";
+		String result = this.md5_making(pwd);
+		System.out.println(result);
+		return null;
+	}
 	
 	@GetMapping("/restapi.do")
 	//@SessionAttribute : session이 이미 등록되어있는 상황일 경우 해당 정보를 가져올 수 있음

@@ -1,0 +1,16 @@
+create table ad_member(
+aidx int(6) unsigned not null auto_increment,
+aid char(30) not null,
+apass text not null,
+aname char(30) not null,
+aemail varchar(100) not null,
+atel char(11) not null,
+adepart char(10) not null,
+aposition char(10) not null,
+adate timestamp not null default current_timestamp,
+isgrant enum('승인','미승인') not null default '미승인',
+primary key(aidx),
+unique aa(aid),
+unique bb(aemail),
+unique cc(atel)
+);
