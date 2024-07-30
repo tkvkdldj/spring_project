@@ -6,4 +6,8 @@
 select count(aid) as ck from ad_member where aid=#{aid}
 </select>
 
+<insert id="member_insert">
+insert into ad_member (aidx, aid, apass, aname, aemail, atel, adepart, aposition, adate, isgrant)
+values ('0', #{aid}, #{apass}, #{aname}, #{aemail}, #{atel}, #{adepart}, #{aposition}, now(), #{isgrant})
+</insert>
 </mapper>

@@ -1,17 +1,15 @@
 var idck = "";
 var cktext = document.getElementById("cktext");
-var timer;
 /* 
-아이디 값이 사라졌을 때 자동으로 cktext도 실시간 사라지는 것 구현하기 
-=>(버그)사용 가능한 아이디인 상태에서 지웠다가 다시 winter하면 날아감 -> setInterval 홀용
+아이디 값이 사라졌을 때 자동으로 cktext도 실시간 사라지는 것 구현하기 => ok
 */
 
-export function ck_inaid(){
-	console.log("우다다");
-}
-	
-//timer = setInterval(ck_inaid, 500); //이렇게 하면 작동됨 500이 0.5초 맞는 듯
 export class enroll_member{
+	detect_id(){
+		idck = "";
+		cktext.innerText = "";
+	}
+	
 	send_data(){
 		this.data = [frm_enroll.aid, frm_enroll.apass[0], frm_enroll.apass[1], frm_enroll.aname
 		,frm_enroll.aemail, frm_enroll.atel[0], frm_enroll.atel[1], frm_enroll.atel[2], 
@@ -57,8 +55,6 @@ export class enroll_member{
 	}
 	
 	check_id(aid){
-		clearInterval(timer); // 왜 작동을 안해
-		
 		this.id = "aid="+aid; // 이걸 꼭 해줘야하는 구나
 		fetch("./checkidok.do",{
 			method : "POST",
