@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자 등록 페이지</title>
     <link rel="stylesheet" type="text/css" href="./css/basic.css">
-    <link rel="stylesheet" type="text/css" href="./css/login.css?v=1">
+    <link rel="stylesheet" type="text/css" href="./css/login.css?v=2">
     <link rel="icon" href="./img/logo.png" sizes="128x128">
     <link rel="icon" href="./img/logo.png" sizes="64x64">
     <link rel="icon" href="./img/logo.png" sizes="32x32">
@@ -27,10 +27,11 @@
                 <li>
                 <input type="text" class="add_input1" name="aid" placeholder="생성할 관리자 아이디를 입력하세요">
                 <button type="button"  class="btn_button" id="ckid_btn">중복체크</button>
+                 <span class="check_text" id="cktext"></span>
                 </li>
                 <li>
-                    <input type="text" class="add_input1" name="apass" placeholder="접속할 패스워드를 입력하세요">
-                    <input type="text" class="add_input1" name="apass" placeholder="동일한 패스워드를 입력하세요">
+                    <input type="password" class="add_input1" name="apass" placeholder="접속할 패스워드를 입력하세요">
+                    <input type="password" class="add_input1" name="apass" placeholder="동일한 패스워드를 입력하세요">
                 </li>
                 <li class="font_color1">관리자 기본정보 입력</li>
                 <li>
@@ -84,7 +85,7 @@
 </body>
 
 <script type="module">
-import {enroll_member} from "./js/add_master.js?v=3";
+import {enroll_member, ck_inaid} from "./js/add_master.js?v=4";
 
 document.querySelector("#enroll_btn").addEventListener("click", function(){
 	new enroll_member().send_data();
@@ -92,7 +93,7 @@ document.querySelector("#enroll_btn").addEventListener("click", function(){
 
 document.querySelector("#ckid_btn").addEventListener("click", function(){
 	if(frm_enroll.aid.value == ""){
-		alert("아이디를 입력해주세요");
+		alert("아이디를 입력해주세요.");
 	}
 	else{
 		new enroll_member().check_id(frm_enroll.aid.value);

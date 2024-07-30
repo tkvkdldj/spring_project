@@ -1,5 +1,16 @@
 var idck = "";
+var cktext = document.getElementById("cktext");
+var timer;
+/* 
+아이디 값이 사라졌을 때 자동으로 cktext도 실시간 사라지는 것 구현하기 
+=>(버그)사용 가능한 아이디인 상태에서 지웠다가 다시 winter하면 날아감 -> setInterval 홀용
+*/
 
+export function ck_inaid(){
+	console.log("우다다");
+}
+	
+//timer = setInterval(ck_inaid, 500); //이렇게 하면 작동됨 500이 0.5초 맞는 듯
 export class enroll_member{
 	send_data(){
 		this.data = [frm_enroll.aid, frm_enroll.apass[0], frm_enroll.apass[1], frm_enroll.aname
@@ -19,19 +30,35 @@ export class enroll_member{
 		if(this.count > 0){ //하나라도 빈값이 있다는 것
 			alert("모든 정보를 입력하셔야만 등록이 가능합니다.");
 		}
-		else{ //아이디 중복시 날아가지 않게 하는 것도 핸들링
-			if(idck == "ok"){
-				frm_enroll.method="post";
-				frm_enroll.action="./enrollok.do";
-				frm_enroll.submit();	
+		else{ 
+			if(idck == "ok"){ //아이디 중복시 날아가지 않게 하는 것도 핸들링
+				if(frm_enroll.apass[0].value != frm_enroll.apass[1].value){
+					alert("패스워드가 일치하지 않습니다.");
+				}
+				else if(frm_enroll.aemail.value.indexOf("@") == -1){ //이메일 체크
+					alert("제대로된 형식의 이메일 입력해주세요.");	
+				}
+				else if(isNaN(frm_enroll.atel[0].value) || isNaN(frm_enroll.atel[1].value) || isNaN(frm_enroll.atel[2].value)){ //전화번호 체크
+					alert("전화번호는 숫자만 입력 가능합니다.");
+				}	
+				else{
+					frm_enroll.method="post";
+					frm_enroll.action="./enrollok.do";
+					frm_enroll.submit();	
+				}
+			}
+			else if(idck == "no"){
+				alert("중복된 아이디는 등록하실 수 없습니다.");
 			}
 			else{
-				alert("중복된 아이디는 등록하실 수 없습니다.");
+				alert("아이디 중복 체크해주세요.");
 			}
 		}
 	}
 	
 	check_id(aid){
+		clearInterval(timer); // 왜 작동을 안해
+		
 		this.id = "aid="+aid; // 이걸 꼭 해줘야하는 구나
 		fetch("./checkidok.do",{
 			method : "POST",
@@ -42,10 +69,10 @@ export class enroll_member{
 			
 		}).then(function(b){
 			if(b == "ok"){
-				alert("가입 가능한 아이디 입니다.");
+				cktext.innerText = "사용 가능한 아이디입니다.";
 			}
 			else{
-				alert("중복된 아이디 입니다.");
+				cktext.innerText = "이미 사용 중인 아이디입니다.";
 				frm_enroll.aid.focus();
 			}
 			idck = b;

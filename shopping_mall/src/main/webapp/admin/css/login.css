@@ -155,6 +155,16 @@
     font-weight: 700;
     line-height: 40px;
 }
+
+/*내가 추가*/
+.check_text {
+	color : red;
+	font-size: 13px;
+	display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
 .admin_title_add { 
     width: 100%;
     height:50px;
