@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자 등록 페이지</title>
     <link rel="stylesheet" type="text/css" href="./css/basic.css">
-    <link rel="stylesheet" type="text/css" href="./css/login.css?v=2">
+    <link rel="stylesheet" type="text/css" href="./css/login.css?v=3">
     <link rel="icon" href="./img/logo.png" sizes="128x128">
     <link rel="icon" href="./img/logo.png" sizes="64x64">
     <link rel="icon" href="./img/logo.png" sizes="32x32">
@@ -21,11 +21,12 @@
 
     <section class="admin_bgcolor_add">
         <form id="frm_enroll">
+        <input type="hidden" name="isgrant" value='미승인'>
         <div class="admin_login_add">
             <ul>
                 <li class="font_color1">아이디 및 패스워드 정보</li>
                 <li>
-                <input type="text" class="add_input1" name="aid" placeholder="생성할 관리자 아이디를 입력하세요">
+                <input type="text" class="add_input1" name="aid" placeholder="생성할 관리자 아이디를 입력하세요" id=isidchange>
                 <button type="button"  class="btn_button" id="ckid_btn">중복체크</button>
                  <span class="check_text" id="cktext"></span>
                 </li>
@@ -85,7 +86,7 @@
 </body>
 
 <script type="module">
-import {enroll_member, ck_inaid} from "./js/add_master.js?v=4";
+import {enroll_member} from "./js/add_master.js?v=5";
 
 document.querySelector("#enroll_btn").addEventListener("click", function(){
 	new enroll_member().send_data();
@@ -98,6 +99,10 @@ document.querySelector("#ckid_btn").addEventListener("click", function(){
 	else{
 		new enroll_member().check_id(frm_enroll.aid.value);
 	}
+});
+
+document.querySelector("#isidchange").addEventListener("input", function(){
+	new enroll_member().detect_id();
 });
 
 </script>
