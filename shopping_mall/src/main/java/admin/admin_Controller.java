@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -27,6 +29,32 @@ public class admin_Controller {
 	
 	@Resource(name="adsession")
 	private admin_session as;
+	
+	
+	//기본설정값 받기
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/admin/admin_sitedataok.do")
+	public String admin_sitedataok(@RequestBody String data, HttpServletResponse res) throws Exception{
+		//System.out.println(data);
+		
+		this.pw = res.getWriter();
+		// [] 모양으로 날아올거임
+		try {
+			JSONArray ja = new JSONArray(data);
+			System.out.println(ja);
+			this.pw.print("ok");
+		}
+		catch(Exception e) {
+			System.out.println("배열 받기 에러");
+			this.pw.print("no");
+		}
+		
+		
+		this.pw.close();
+		
+		return null;
+	}
+	
 	
 	//쇼핑몰 기본 설정
 	@GetMapping("/admin/admin_siteinfo.do")
