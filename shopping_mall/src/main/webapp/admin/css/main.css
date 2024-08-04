@@ -51,6 +51,17 @@
 .navcss > .nav_div > ol > li:hover{
     color: orangered;
 }
+
+/*내가 추가*/
+.navcss > .nav_div > ol > li > a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+
 .maincss { 
     height: auto;
     padding-top: 20px;

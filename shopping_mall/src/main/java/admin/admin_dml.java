@@ -1,4 +1,7 @@
-package shopping_admin;
+package admin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -14,6 +17,15 @@ public class admin_dml {
 	
 	@Resource(name = "shapass")
 	private sha_pass sp;
+	
+	//회원가입된 모든 관리자 select
+	public List<ad_member_dao> all_select(){
+		List<ad_member_dao> all_data = new ArrayList<ad_member_dao>();
+		all_data = tm.selectList("Welcome_mall.select_all");
+		
+		return all_data;
+	}
+	
 	
 	//관리자 insert -> 아이디 외의 이메일, 전화번호 중복도 생각 & 비밀번호는 암호화
 	public int member_insert(ad_member_dao dao) { //왜 extends 가 안되지
