@@ -32,6 +32,13 @@ public class admin_Controller {
 	@Resource(name="adsession")
 	private admin_session as;
 	
+	@PostMapping("/admin/cate_list.do")
+	public String cate_writeok(@ModelAttribute("cate") cate_list_dao dao) {
+		System.out.println(dao.getCsortcode());
+		System.out.println(dao.getCemenuname());
+		return "cate_list";
+	}
+	
 	//상품관리-신규등록-카테고리 등록(카테고리 관리)-카테고리 등록
 	@PostMapping("/admin/cate_write.do")
 	public String cate_write() {

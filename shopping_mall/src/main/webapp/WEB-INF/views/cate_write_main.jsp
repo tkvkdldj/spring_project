@@ -57,7 +57,9 @@
 </main>
 
 <script type="module">
-import {cate_enroll} from "./js/cate_write_main.js?v=1";
+
+import {cate_enroll} from "./js/cate_write_main.js?v=2";
+
 
 document.querySelector("#cmenucode").addEventListener("input", function(){
 	frm_catewrite.csortcode.value = frm_catewrite.cmenucode.value;
