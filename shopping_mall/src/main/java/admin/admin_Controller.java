@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class admin_Controller {
@@ -29,6 +31,36 @@ public class admin_Controller {
 	
 	@Resource(name="adsession")
 	private admin_session as;
+	
+	//상품관리-신규등록-카테고리 등록(카테고리 관리)-카테고리 등록
+	@PostMapping("/admin/cate_write.do")
+	public String cate_write() {
+		
+		return "cate_write";
+	}
+	
+	
+	//상품관리-신규 등록-카테고리 등록(카테고리 관리)
+	@PostMapping("/admin/cate_list.do")
+	public String cate_list() {
+		
+		return "cate_list";
+	}
+	
+	
+	//상품관리-신규 등록 클릭
+	@PostMapping("/admin/product_write.do")
+	public String product_write() {
+		
+		return "product_write";
+	}
+	
+	//상품관리 클릭
+	@PostMapping("/admin/product_list.do")
+	public String product_list() {
+		
+		return "product_list";
+	}
 	
 	//기본설정값 받기
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -55,8 +87,8 @@ public class admin_Controller {
 	}
 	
 	
-	//쇼핑몰 기본 설정 -> 못들어가게 막기
-	@GetMapping("/admin/admin_siteinfo.do")
+	//쇼핑몰 기본 설정
+	@PostMapping("/admin/admin_siteinfo.do")
 	public String admin_siteinfo(HttpServletResponse res) {
 		
 		return "admin_siteinfo";
@@ -80,14 +112,20 @@ public class admin_Controller {
 	}
 	
 	
-	
-	@GetMapping("/admin/admin_main.do")
-	public String admin_main2(HttpServletResponse res,HttpSession session, @RequestParam(defaultValue="", required=true) String rd, Model m) throws Exception{
+	//리스트 이동
+	@RequestMapping("/admin/admin_list.do") //get으로도, post로도
+	public String admin_main2(@SessionAttribute(name="aid", required=false) String aid, Model m, HttpServletResponse res) throws Exception{
 		//jstl로 찍을 수 있게 select 값 보내기 (전체 카운트값을 보낼 수 있는 방법 없나 아)
 		res.setContentType("text/html;charset=utf-8");
 		this.pw = res.getWriter();
-		
-		if(rd.equals((String)session.getAttribute("rd"))) {			
+		if(aid == null) {
+			this.pw.print("<script>"
+					+ "alert('올바른 접근이 아닙니다.');"
+					+ "history.go(-1);"
+					+ "</script>");
+			this.pw.close();
+		}
+		else {			
 			try {
 				List<ad_member_dao> result = ad.all_select();
 				int total = result.size();
@@ -98,15 +136,8 @@ public class admin_Controller {
 				m.addAttribute("result", "no");
 			}
 		}
-		else {
-			this.pw.print("<script>"
-					+ "alert('올바르지 못한 접근입니다.');"
-					+ "history.go(-1);"
-					+ "</script>");
-			this.pw.close();
-		}
 				
-		return "admin_main";
+		return "admin_list"; //변경함
 	}
 	
 	
@@ -117,18 +148,17 @@ public class admin_Controller {
 		
 		res.setContentType("text/html;charset=utf-8");
 		this.pw = res.getWriter();
+		
 		if(aid.equals("master") && apass.equals("shop_master123")) {
 			as.make_session(session, "aid", aid); //세션을 모듈에서 생성
 			as.make_session(session, "aname", "홍길동");
-			int rand_num = (int)Math.ceil(Math.random()*1000);
-			as.make_session(session, "rd", String.valueOf(rand_num));
 			
 			this.pw.print("<script>"
-					+ "alert('정상적으로 로그인 완료 되었습니다.');"
-					+ "location.href = './admin_main.do?rd="+rand_num+"';"
+					+ "alert('로그인 되었습니다.');"
+					+ "location.href = './admin_list.do';"
 					+ "</script>");			
+			this.pw.close();
 		}
-		this.pw.close();
 		
 		return "admin_main"; 
 		//"views가 admin디렉토리라 같다고 생각" "다 지우고 admin_main이라고 하면 views 안에 admin디렉토리를 만들필요 없음
