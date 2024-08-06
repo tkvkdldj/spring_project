@@ -4,6 +4,7 @@
 <section>
     <p>카테고리 등록 페이지</p>
 <form id="frm_catewrite">
+<input type="hidden" name="newcate" value="Y">
     <div class="cate_insert">
         <ul>
             <li>분류코드</li>
@@ -41,14 +42,14 @@
         <ul>
             <li>사용 유/무</li>
             <li>
-                <label class="rmargin"><input type="radio" name="isuse" checked>사용함 </label>
-                <label class="rmargin"><input type="radio" name="isuse">사용안함</label>
+                <label class="rmargin"><input type="radio" name="isuse" value="Y" checked>사용함 </label>
+                <label class="rmargin"><input type="radio" name="isuse" value="N">사용안함</label>
             </li>
             <li>※ 카테고리 사용안함으로 설정시 쇼핑몰에 해당 메뉴는 생성 되지 않습니다.</li>
         </ul>
     </div>
     <div class="subpage_view4" style="text-align:center;">
-        <input type="button" value="카테고리 리스트" title="카테고리 리스트" class="p_button p_button_color1" style="margin-right: 5px;">
+        <input type="button" value="카테고리 리스트" title="카테고리 리스트" class="p_button p_button_color1" style="margin-right: 5px;" id="go_catelist">
         <input type="button" value="카테고리 생성" title="카테고리 생성" class="p_button p_button_color2" id="cate_create">
         </span>
     </div>
@@ -63,6 +64,10 @@ import {cate_enroll} from "./js/cate_write_main.js?v=2";
 
 document.querySelector("#cmenucode").addEventListener("input", function(){
 	frm_catewrite.csortcode.value = frm_catewrite.cmenucode.value;
+});
+
+document.querySelector("#go_catelist").addEventListener("click", function(){
+	location.href = "./cate_list.do";
 });
 
 document.querySelector("#cate_create").addEventListener("click", function(){

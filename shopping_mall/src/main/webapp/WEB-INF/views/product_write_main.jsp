@@ -115,9 +115,7 @@
 
 <script type="module">
 document.querySelector("#cate_enroll").addEventListener("click", function(){
-	frm_pdwrite.method = "post";
-	frm_pdwrite.action = "./cate_list.do";
-	frm_pdwrite.submit();
+	location.href = "./cate_list.do";
 });
 
 </script>

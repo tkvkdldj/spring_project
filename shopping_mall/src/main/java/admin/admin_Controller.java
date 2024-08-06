@@ -1,6 +1,8 @@
 package admin;
 
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,12 +35,6 @@ public class admin_Controller {
 	@Resource(name="adsession")
 	private admin_session as;
 	
-	@PostMapping("/admin/cate_list.do")
-	public String cate_writeok(@ModelAttribute("cate") cate_list_dao dao) {
-		System.out.println(dao.getCsortcode());
-		System.out.println(dao.getCemenuname());
-		return "cate_list";
-	}
 	
 	//상품관리-신규등록-카테고리 등록(카테고리 관리)-카테고리 등록
 	@PostMapping("/admin/cate_write.do")
@@ -46,10 +43,54 @@ public class admin_Controller {
 		return "cate_write";
 	}
 	
+	//카테고리 생성 성공(카테고리 data insert)
+	@PostMapping("/admin/cate_writeok.do")
+	public String cate_writeok(@ModelAttribute("cate") cate_list_dao dao, HttpServletResponse res) throws Exception{
+		res.setContentType("text/html;charset=utf-8");
+		this.pw = res.getWriter();
+		
+		try {
+			int callback = ad.cate_insert(dao);
+			
+			if(callback > 0) {
+				this.pw.print("<script>"
+						+ "alert('카테고리가 정상적으로 생성 되었습니다.');"
+						+ "location.href = './cate_list.do';"
+						+ "</script>");
+			}
+		}
+		catch (DuplicateKeyException dke) {
+	        this.pw.print("<script>"
+	                + "alert('중복된 데이터가 존재합니다.');"
+	                + "history.go(-1);"
+	                + "</script>");
+		} 
+		catch(Exception e) {
+			 this.pw.print("<script>"
+		                + "alert(데이터베이스 오류로 생성되지 못하였습니다.');"
+		                + "history.go(-1);"
+		                + "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
+		
+		return null;
+	}
 	
-	//상품관리-신규 등록-카테고리 등록(카테고리 관리)
-	@PostMapping("/admin/cate_list.do")
-	public String cate_list() {
+	//상품관리-신규 등록-카테고리 등록(카테고리 관리) -> 그냥 리스트만 띄움
+	@GetMapping("/admin/cate_list.do") //@SessionAttribute(name="aid", required=false) String aid, 
+	public String cate_list(Model m) {
+		//카테고리 데이터베이스 select해서 받아옴
+		try {
+			List<cate_list_dao> cate_data = ad.cate_select();
+			int total = cate_data.size();
+			m.addAttribute("cate_data", cate_data);
+			m.addAttribute("total", total);
+		}
+		catch(Exception e) {
+			
+		}
 		
 		return "cate_list";
 	}
@@ -62,10 +103,18 @@ public class admin_Controller {
 		return "product_write";
 	}
 	
-	//상품관리 클릭
-	@PostMapping("/admin/product_list.do")
-	public String product_list() {
-		
+	//상품관리 클릭 (로그인 제한)
+	@GetMapping("/admin/product_list.do")
+	public String product_list(@SessionAttribute(name="aid", required=false) String aid, HttpServletResponse res) throws Exception{
+		res.setContentType("text/html;charset=utf-8");
+		this.pw = res.getWriter();
+		if(aid == null) {
+			this.pw.print("<script>"
+					+ "alert('로그인 후 이용 가능합니다.');"
+					+ "location.href='./';"
+					+ "</script>");
+			this.pw.close();
+		}
 		return "product_list";
 	}
 	
@@ -94,10 +143,18 @@ public class admin_Controller {
 	}
 	
 	
-	//쇼핑몰 기본 설정
-	@PostMapping("/admin/admin_siteinfo.do")
-	public String admin_siteinfo(HttpServletResponse res) {
-		
+	//쇼핑몰 기본 설정 (로그인 제한)
+	@GetMapping("/admin/admin_siteinfo.do")
+	public String admin_siteinfo(@SessionAttribute(name="aid", required=false) String aid, HttpServletResponse res) throws Exception{
+		res.setContentType("text/html;charset=utf-8");
+		this.pw = res.getWriter();
+		if(aid == null) {
+			this.pw.print("<script>"
+					+ "alert('로그인 후 이용 가능합니다.');"
+					+ "location.href = './';"
+					+ "</script>");
+			this.pw.close();
+		}
 		return "admin_siteinfo";
 	}
 	
@@ -111,7 +168,7 @@ public class admin_Controller {
 		this.pw = res.getWriter();
 		this.pw.print("<script>"
 				+ "alert('정상적으로 로그아웃 되셨습니다.');"
-				+ "location.href = './index.jsp';"
+				+ "location.href = './';"
 				+ "</script>");
 		this.pw.close();
 		
@@ -119,15 +176,15 @@ public class admin_Controller {
 	}
 	
 	
-	//리스트 이동
-	@RequestMapping("/admin/admin_list.do") //get으로도, post로도
+	//리스트 이동 (로그인 제한)
+	@GetMapping("/admin/admin_list.do") //get으로도, post로도 -> 이걸 get으로 바꿔야할까..? 내부에서 이동할 때도 get으로 처리할까
 	public String admin_main2(@SessionAttribute(name="aid", required=false) String aid, Model m, HttpServletResponse res) throws Exception{
 		//jstl로 찍을 수 있게 select 값 보내기 (전체 카운트값을 보낼 수 있는 방법 없나 아)
 		res.setContentType("text/html;charset=utf-8");
 		this.pw = res.getWriter();
 		if(aid == null) {
 			this.pw.print("<script>"
-					+ "alert('올바른 접근이 아닙니다.');"
+					+ "alert('로그인 후 이용 가능합니다.');"
 					+ "history.go(-1);"
 					+ "</script>");
 			this.pw.close();
@@ -140,7 +197,7 @@ public class admin_Controller {
 				m.addAttribute("total", total);
 			}
 			catch(Exception e) {
-				m.addAttribute("result", "no");
+				m.addAttribute("result", "no"); // 이건 왜 안써먹냐
 			}
 		}
 				

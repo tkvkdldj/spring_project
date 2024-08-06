@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class cate_list_dao {
 	int cidx;
-	String csortcode, cmenucode, cemenuname, isuse, cdate;
+	String csortcode, cmenucode, cmenuname, isuse, cdate;
 }

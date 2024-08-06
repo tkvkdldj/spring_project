@@ -63,13 +63,12 @@
     <input type="button" value="선택상품 삭제" title="선택상품 삭제" class="p_button">
     <span style="float: right;">
     <input type="button" value="신규상품 등록" title="신규상품 등록" class="p_button p_button_color1" id="new_enroll">
-    <input type="button" value="카테고리 등록" title="카테고리 등록" class="p_button p_button_color2">
+    <input type="button" value="카테고리 등록" title="카테고리 등록" class="p_button p_button_color2" id="cate_enroll">
     </span>
 </div>
  </form>   
 </section>
 </main>
-
 <script type="module">
 document.querySelector("#new_enroll").addEventListener("click", function(){
 	frm_pdlist.method = "post";
@@ -77,4 +76,9 @@ document.querySelector("#new_enroll").addEventListener("click", function(){
 	frm_pdlist.submit();
 });
 
+document.querySelector("#cate_enroll").addEventListener("click", function(){
+	frm_pdlist.method = "get";
+	frm_pdlist.action = "./cate_list.do";
+	frm_pdlist.submit();
+});
 </script>

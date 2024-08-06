@@ -1,5 +1,7 @@
 package admin;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,20 @@ public class admin_dml {
 		return all_data;
 	}
 	
+	//카테고리 전부 select
+	public List<cate_list_dao> cate_select(){
+		List<cate_list_dao> cate_data = new ArrayList<cate_list_dao>();
+		cate_data = tm.selectList("Welcome_mall.cate_select");
+		
+		return cate_data;
+	}
+	
+	
+	//카테고리 insert
+	public int cate_insert(cate_list_dao dao) {
+		int result = tm.insert("Welcome_mall.cate_insert", dao);
+		return result;
+	}
 	
 	//관리자 insert -> 아이디 외의 이메일, 전화번호 중복도 생각 & 비밀번호는 암호화
 	public int member_insert(ad_member_dao dao) { //왜 extends 가 안되지

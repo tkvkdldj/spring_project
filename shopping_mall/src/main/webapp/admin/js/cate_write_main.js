@@ -17,7 +17,7 @@ export class cate_enroll{
 		}
 		else{
 			frm_catewrite.method = "post";
-			frm_catewrite.action = "./cate_list.do";
+			frm_catewrite.action = "./cate_writeok.do";
 			frm_catewrite.submit();
 		}
 	}
