@@ -20,7 +20,7 @@
 <form id="frm_catewrite">
 <div class="subpage_view2">
     <ul>
-        <li><input type="checkbox"></li>
+        <li><input type="checkbox" name="all_ck" id="all_ck"></li>
         <li>분류코드</li>
         <li>대메뉴 코드</li>
         <li>대메뉴명</li>
@@ -38,7 +38,7 @@
 <cr:otherwise>
 <cr:forEach var="list" items="${cate_data}" varStatus="n">
     <ul>
-        <li><input type="checkbox"></li>
+        <li><input type="checkbox" name="each_ck"></li>
         <li style="text-align: left; text-indent: 5px;">${list.getCsortcode()}</li>
         <li>${list.getCmenucode()}</li>
         <li style="text-align: left; text-indent: 5px;">${list.getCmenuname()}</li>
@@ -72,6 +72,19 @@
 </main>
 
 <script type="module">
+import {delete_cate} from "./js/cate_list_main.js?v=1"
+
+//class를 사용하면 ".class" 이런식으로 사용할 수 있긴 한데
+document.querySelectorAll('[name="each_ck"]').forEach(function(element) {
+  element.addEventListener("click", function() {
+    console.log("test");
+  });
+});
+
+document.querySelector("#all_ck").addEventListener("click", function(){
+	new delete_cate().handling_all_ck();
+});
+
 document.querySelector("#go_pdlist").addEventListener("click", function(){
 	location.href = "./product_list.do";
 });
