@@ -36,6 +36,34 @@ public class admin_Controller {
 	private admin_session as;
 	
 	
+	//카테고리 삭제
+	@PostMapping("/admin/cate_deleteok.do")
+	public String cate_deleteok(String each_ck[], HttpServletResponse res) throws Exception{
+		res.setContentType("text/html;charset=utf-8");
+		int callback = ad.cate_delete(each_ck);
+		
+		try {
+			if(callback == each_ck.length) {			
+				this.pw = res.getWriter();
+				this.pw.print("<script>"
+						+ "alert('정상적으로 삭제되었습니다.');"
+						+ "location.href = './cate_list.do';"
+						+ "</script>");
+			}
+		}
+		catch(Exception e) {
+			this.pw.print("<script>"
+	                + "alert(데이터베이스 오류로 삭제되지 못하였습니다.');"
+	                + "history.go(-1);"
+	                + "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
+		
+		return null;
+	}
+	
 	//상품관리-신규등록-카테고리 등록(카테고리 관리)-카테고리 등록
 	@PostMapping("/admin/cate_write.do")
 	public String cate_write() {
@@ -78,18 +106,71 @@ public class admin_Controller {
 		return null;
 	}
 	
-	//상품관리-신규 등록-카테고리 등록(카테고리 관리) -> 그냥 리스트만 띄움
-	@GetMapping("/admin/cate_list.do") //@SessionAttribute(name="aid", required=false) String aid, 
-	public String cate_list(Model m) {
-		//카테고리 데이터베이스 select해서 받아옴
+	//카테고리 검색 -> 검색 보안을 위해 post 사용
+	@PostMapping("/admin/cate_list.do")
+	public String cate_search(Model m, 
+			@RequestParam(defaultValue = "", required = false) String part, 
+			@RequestParam(defaultValue = "", required = false) String search,
+			HttpServletResponse res) throws Exception {
+		//this.pw = res.getWriter();
+		res.setContentType("text/html;charset=utf-8");
+		List<cate_list_dao> cate_data = null;
+		
 		try {
-			List<cate_list_dao> cate_data = ad.cate_select();
-			int total = cate_data.size();
+			if(part.equals("") && search.equals("")) {
+				cate_data = ad.cate_select();
+				m.addAttribute("total", cate_data.size());
+			}
+			else {
+				m.addAttribute("part", part);
+				m.addAttribute("search", search);
+				cate_data = ad.cate_select(part, search);
+				m.addAttribute("total", cate_data.size());
+			}
 			m.addAttribute("cate_data", cate_data);
-			m.addAttribute("total", total);
 		}
 		catch(Exception e) {
-			
+			this.pw = res.getWriter();
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 오류로 인해 검색되지 못하였습니다.');"
+					+ "location.href = './cate_list.do';"
+					+ "</script>");
+			this.pw.close();
+		}
+		/*
+		finally {
+			this.pw.close();
+		}
+		*/
+		//this.pw.close()를 finally로 빼고 getWriter()도 try문 밖으로 빼면 작동 안됨, 흰페이지 뜸
+		return "cate_list";
+	}
+		
+	//상품관리-신규 등록-카테고리 등록(카테고리 관리) -> 그냥 리스트만 띄움
+	@GetMapping("/admin/cate_list.do")
+	public String cate_list(@SessionAttribute(name="aid", required=false) String aid, Model m, HttpServletResponse res) 
+	throws Exception{
+		//카테고리 데이터베이스 select해서 받아옴
+		
+		res.setContentType("text/html;charset=utf-8");
+		this.pw = res.getWriter();
+		if(aid == null) {
+			this.pw.print("<script>"
+					+ "alert('로그인 후 이용 가능합니다.');"
+					+ "location.href='./';"
+					+ "</script>");
+			this.pw.close();
+		}
+		else {
+			try {
+				List<cate_list_dao> cate_data = ad.cate_select();
+				int total = cate_data.size();
+				m.addAttribute("cate_data", cate_data);
+				m.addAttribute("total", total);
+			}
+			catch(Exception e) {
+				
+			}			
 		}
 		
 		return "cate_list";

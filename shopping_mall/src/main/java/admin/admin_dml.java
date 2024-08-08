@@ -3,7 +3,9 @@ package admin;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -20,12 +22,38 @@ public class admin_dml {
 	@Resource(name = "shapass")
 	private sha_pass sp;
 	
+	//카테고리 delete
+	public int cate_delete(String cidx[]) {
+		int count = 0;
+		int f;
+		for(f=0; f<cidx.length; f++) {
+			tm.delete("Welcome_mall.cate_delete", cidx[f]);
+			count++;
+		}
+		
+		return count;
+	}
+	
+	
 	//회원가입된 모든 관리자 select
 	public List<ad_member_dao> all_select(){
 		List<ad_member_dao> all_data = new ArrayList<ad_member_dao>();
 		all_data = tm.selectList("Welcome_mall.select_all");
 		
 		return all_data;
+	}
+	
+	//카테고리 검색 select
+	public List<cate_list_dao> cate_select(String part, String search){
+		List<cate_list_dao> search_data = new ArrayList<cate_list_dao>();
+		
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("part", part);
+		m.put("search", search);
+		
+		search_data = tm.selectList("Welcome_mall.cate_search", m);
+		
+		return search_data;
 	}
 	
 	//카테고리 전부 select
