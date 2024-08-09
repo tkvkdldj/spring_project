@@ -64,6 +64,14 @@ public class admin_dml {
 		return cate_data;
 	}
 	
+	//카테고리코드만 select
+	public List<String> cate_code(){
+		List<String> code = new ArrayList<String>();
+		code = tm.selectList("Welcome_mall.cate_code");
+		
+		return code;
+	}
+	
 	
 	//카테고리 insert
 	public int cate_insert(cate_list_dao dao) {

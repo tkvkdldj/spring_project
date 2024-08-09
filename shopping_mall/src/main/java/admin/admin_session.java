@@ -14,20 +14,6 @@ public class admin_session {
 		session.setMaxInactiveInterval(1800);
 	}
 	
-	//세션 가져오기
-	public String get_session(HttpServletRequest req, String what) {
-		HttpSession session = req.getSession();
-		String result = "";
-		
-		if(what == "아이디") {
-			result = (String)session.getAttribute("aid");
-		}	
-		else {
-			result = (String)session.getAttribute("aname");
-		}
-		return result;
-	}
-	
 	//세션 파기하기
 	public void remove_session(HttpServletRequest req) {
 		HttpSession session = req.getSession();

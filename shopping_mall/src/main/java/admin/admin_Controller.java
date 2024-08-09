@@ -3,6 +3,7 @@ package admin;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class admin_Controller {
@@ -35,6 +37,8 @@ public class admin_Controller {
 	@Resource(name="adsession")
 	private admin_session as;
 	
+	@Resource(name="pdimgsave")
+	private product_img_save pi;
 	
 	//카테고리 삭제
 	@PostMapping("/admin/cate_deleteok.do")
@@ -177,11 +181,26 @@ public class admin_Controller {
 	}
 	
 	
-	//상품관리-신규 등록 클릭
+	//상품관리-신규 등록 클릭-상품등록페이지 //이걸 왜 post했지?
 	@PostMapping("/admin/product_write.do")
-	public String product_write() {
+	public String product_write(Model m) {
+		//카테고리 코드만 가져오는 select
+		List<String> catecode = ad.cate_code();
+		m.addAttribute("catecode", catecode);
 		
 		return "product_write";
+	}
+	
+	//상품등록페이지 -> 신규등록 완료
+	@PostMapping("/admin/prouduct_writeok.do")
+	public String product_writeok(@RequestParam("pdimage") MultipartFile imgs[], HttpServletRequest req) {
+		//System.out.println(dao.getPdorimage());
+		
+		pi.get_imgs(imgs, req);
+		
+		// 중간을 입력 안하고 보냈을 때 => MultipartFile[field="pdimage", filename=, contentType=application/octet-stream, size=0]
+		
+		return null;
 	}
 	
 	//상품관리 클릭 (로그인 제한)
@@ -338,6 +357,7 @@ public class admin_Controller {
 		return null;
 	}
 	
+	//회원가입
 	@PostMapping("/admin/enrollok.do")
 	public String enrollok(@ModelAttribute("admember") ad_member_dao dao, HttpServletResponse res) throws Exception {
 		res.setContentType("text/html;charset=utf-8");
@@ -349,7 +369,7 @@ public class admin_Controller {
 			if(callback > 0) {
 				this.pw.print("<script>"
 						+ "alert('정상적으로 회원가입이 완료되었습니다.');"
-						+ "location.href='./index.jsp';"
+						+ "location.href='./';"
 						+ "</script>");			
 			}
 			else {
@@ -372,7 +392,7 @@ public class admin_Controller {
 		return null;
 	}
 	
-	//신규가입으로 이동
+	//회원가입창 이동
 	@GetMapping("/admin/add_master.do")
 	public String add_master () {
 		return "add_master";

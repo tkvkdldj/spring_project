@@ -40,6 +40,11 @@ order by cidx desc
 select * from cate_list order by cidx desc
 </select>
 
+<!-- 카테고리코드만 -->
+<select id="cate_code" resultType="String">
+select csortcode from cate_list
+</select>
+
 <insert id="cate_insert">
 insert into cate_list (cidx, csortcode, cmenucode, cmenuname, isuse, cdate)
 values ('0', #{csortcode}, #{cmenucode}, #{cmenuname}, #{isuse}, now())
