@@ -20,7 +20,7 @@
         <li>상품코드</li>
         <li>
             <input type="text" class="product_input1" name="pdcode"> 
-            <input type="button" value="중복확인" title="중복확인" class="product_btn"> <span class="help_text">※ 상품코드는 절대 중복되지 않도록 합니다.</span>
+            <input type="button" value="중복확인" title="중복확인" class="product_btn" id="ck_dup"> <span class="help_text">※ 상품코드는 절대 중복되지 않도록 합니다.</span>
         </li>
     </ul>
     <ul>
@@ -108,7 +108,7 @@
     </ul>
 </div>
 <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
-    <input type="button" value="상품 리스트" title="상품 리스트" class="p_button p_button_color1" style="margin-right: 5px;">
+    <input type="button" value="상품 리스트" title="상품 리스트" class="p_button p_button_color1" style="margin-right: 5px;" id="go_pdlist">
     <input type="button" value="상품 등록" title="상품 등록" class="p_button p_button_color2" id="pd_enroll">
     </span>
 </div>
@@ -117,10 +117,21 @@
 </main>
 
 <script type="module">
-import {send_data} from "./js/product_write_main.js?v=1";
+import {send_data} from "./js/product_write_main.js?v=3";
+
+new send_data().ck_pdcode();
+
+document.querySelector("#ck_dup").addEventListener("click", function(){
+	new send_data().make_pdcode();
+});
+
+document.querySelector("#go_pdlist").addEventListener("click", function(){
+	location.href = "./product_list.do";
+});
+
 
 document.querySelector("#pd_enroll").addEventListener("click", function(){
-	new send_data().go_page();
+	new send_data().ck_values();
 });
 
 

@@ -203,7 +203,7 @@ public class admin_Controller {
 		return null;
 	}
 	
-	//상품관리 클릭 (로그인 제한)
+	//상품관리 클릭 => 상품리스트 페이지 (로그인 제한)
 	@GetMapping("/admin/product_list.do")
 	public String product_list(@SessionAttribute(name="aid", required=false) String aid, HttpServletResponse res) throws Exception{
 		res.setContentType("text/html;charset=utf-8");
