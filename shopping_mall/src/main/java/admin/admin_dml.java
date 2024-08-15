@@ -22,6 +22,40 @@ public class admin_dml {
 	@Resource(name = "shapass")
 	private sha_pass sp;
 	
+	@Resource(name= "pdimgsave")
+	private product_img_save pis;
+	
+	//상품 전체 select
+	public List<product_list_dao> allpd_select(){
+		List<product_list_dao> all_data = new ArrayList<product_list_dao>();
+		all_data = tm.selectList("Welcome_mall.product_select");
+		
+		return all_data;
+	}
+	
+	//상품코드 select
+	public String pdcode_select(String pdcode) {
+		String result = tm.selectOne("Welcome_mall.product_code", pdcode);
+		return result;
+	}
+	
+	
+	//상품 insert
+	public int pd_insert(product_list_dao dao) {
+		//첨부파일 이름을 받아야
+		ArrayList<String> or_al = pis.imgs_ornm;
+		ArrayList<String> re_al = pis.imgs_renm;
+		
+		String ornames = String.join(",", or_al);
+		String renames = String.join(",", re_al);
+		
+		dao.setPdorimage(ornames);
+		dao.setPdreimage(renames);
+		
+		int result = tm.insert("Welcome_mall.product_insert",dao);
+		return result;
+	}
+
 	//카테고리 delete
 	public int cate_delete(String cidx[]) {
 		int count = 0;

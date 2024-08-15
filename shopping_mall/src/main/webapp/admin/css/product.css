@@ -180,6 +180,7 @@
     border-bottom: 1px solid #fff;
     font-size: 13px;
 }
+
 .product_insert > ul > li:nth-of-type(1){
     text-indent: 5px;
     width: 15%;
@@ -230,6 +231,7 @@
     color:white;
     cursor: pointer;
 }
+
 .product_label {
     width: 100px;
     text-align: left;
@@ -239,6 +241,15 @@
 .help_text{
     margin-left: 10px;
 }
+
+
+/* 내가 추가 */
+.code_check {
+	margin-left: 10px;
+    font-size: 13px;
+    display: block;
+}
+
 
 .product_text1 { 
     width: 100%;

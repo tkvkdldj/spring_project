@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="cr" uri="http://java.sun.com/jsp/jstl/core"%>
 <main class="maincss">
 <section>
 <p>상품관리 페이지</p>
 <div class="subpage_view">
-    <span>등록된 상품 0건</span>
+    <span>등록된 상품 ${total}건</span>
     <span>
         <form>
         <select class="p_select1">
@@ -31,23 +32,31 @@
         <li>품절</li>
         <li>관리</li>
     </ul>
-    <ul>
-        <li><input type="checkbox"></li>
-        <li>상품코드</li>
-        <li>이미지</li>
-        <li>상품명</li>
-        <li>카테고리 분류</li>
-        <li>34,000</li>
-        <li>30,000</li>
-        <li>11%</li>
-        <li>100</li>
-        <li>Y</li>
-        <li>N</li>
-        <li>관리</li>
-    </ul>
-    <ul>
+<cr:choose>
+<cr:when test="${total == 0}">
+  	<ul>
         <li style="width: 100%;">등록된 상품이 없습니다.</li>
     </ul>
+</cr:when>
+<cr:otherwise>  
+<cr:forEach var="list" items="${result}" varStatus="n">
+    <ul>
+        <li><input type="checkbox"></li>
+        <li>${list.getPdcode()}</li>
+        <li>이미지</li>
+        <li>${list.getPdname()}</li>
+        <li>${list.getCsortcode()}</li>
+        <li>${list.getPdprice()}</li> <!-- ,써줘야함 -->
+        <li>${list.getPd_disprice()}</li>
+        <li>${list.getPd_discount()}%</li>
+        <li>${list.getPdstock()}</li>
+        <li>${list.getIs_sale()}</li>
+        <li>${list.getPdearlyout()}</li>
+        <li>관리</li>
+    </ul>
+</cr:forEach>
+</cr:otherwise> 
+</cr:choose>
 </div>
 <div class="subpage_view3">
     <ul class="pageing">

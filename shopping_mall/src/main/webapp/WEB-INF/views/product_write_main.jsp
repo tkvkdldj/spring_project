@@ -19,8 +19,11 @@
     <ul>
         <li>상품코드</li>
         <li>
-            <input type="text" class="product_input1" name="pdcode"> 
-            <input type="button" value="중복확인" title="중복확인" class="product_btn" id="ck_dup"> <span class="help_text">※ 상품코드는 절대 중복되지 않도록 합니다.</span>
+            <input type="text" class="product_input1" name="pdcode" id="pdcode"> 
+            <img src="./img/change_icon.png" width="30" height="30" id="ch_icon" style="margin-right: 7px; cursor:pointer;">
+            <input type="button" value="중복확인" title="중복확인" class="product_btn" id="ck_dup"> 
+       		<span class="code_check" id="ck_code"></span>
+            <span class="help_text">※ 상품코드는 절대 중복되지 않도록 합니다.</span>
         </li>
     </ul>
     <ul>
@@ -38,13 +41,13 @@
     <ul>
         <li>판매가격</li>
         <li>
-            <input type="text" class="product_input3" maxlength="7" name="pdprice"> <span class="help_text">※ , 없이 숫자만 입력하세요 최대 7자리</span>
+            <input type="text" class="product_input3" maxlength="7" name="pdprice" id="pdprice"> <span class="help_text">※ , 없이 숫자만 입력하세요 최대 7자리</span>
         </li>
     </ul>
     <ul>
         <li>할인율</li>
         <li>
-            <input type="text" class="product_input3" maxlength="2" value="0" name="pd_discount">% <span class="help_text">※ 숫자만 입력하세요</span>
+            <input type="text" class="product_input3" maxlength="2" value="0" name="pd_discount" id="pd_discount">% <span class="help_text">※ 숫자만 입력하세요</span>
         </li>
     </ul>
     <ul>
@@ -117,12 +120,31 @@
 </main>
 
 <script type="module">
-import {send_data} from "./js/product_write_main.js?v=3";
+import {send_data} from "./js/product_write_main.js?v=4";
 
 new send_data().ck_pdcode();
 
+//상품코드 변화 감지
+document.querySelector("#pdcode").addEventListener("input", function(){
+	document.getElementById('ck_code').innerText = "";
+});
+
+
+document.querySelector("#ch_icon").addEventListener("click", function(){
+	new send_data().ck_pdcode();
+	document.getElementById('ck_code').innerText = "";
+});
+
+//할인가격 자동 계산
+document.querySelectorAll("#pd_discount, #pdprice").forEach(function(element) {
+    element.addEventListener("input", function() {
+        new send_data().discount_price();
+    });
+});
+
+
 document.querySelector("#ck_dup").addEventListener("click", function(){
-	new send_data().make_pdcode();
+	new send_data().ck_isdupli();
 });
 
 document.querySelector("#go_pdlist").addEventListener("click", function(){

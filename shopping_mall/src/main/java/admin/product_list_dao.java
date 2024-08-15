@@ -8,6 +8,7 @@ import lombok.Setter;
 public class product_list_dao {
 	int pidx;
 	String pdprice, pd_discount, pd_disprice, pdstock; //넘어오는 값은 전부 String이니까?
-	String csortcode, pdcode, pdname, pdaddexplan, is_sale, pdorimage, pdreimage, pdate;
+	String csortcode, pdcode, pdname, pdaddexplan;
+	String is_sale, pdearlyout, pdorimage, pdreimage, pd_detailexplan, pdate;
 	
 }

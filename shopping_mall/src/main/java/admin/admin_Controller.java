@@ -181,6 +181,10 @@ public class admin_Controller {
 	}
 	
 	
+	
+	
+	
+	
 	//상품관리-신규 등록 클릭-상품등록페이지 //이걸 왜 post했지?
 	@PostMapping("/admin/product_write.do")
 	public String product_write(Model m) {
@@ -190,22 +194,82 @@ public class admin_Controller {
 		
 		return "product_write";
 	}
+
+	
+	
+	
+	//상품코드 중복체크
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/admin/checkpcodeok.do")
+	public String checkpcodeok(String pdcode, HttpServletResponse res) throws Exception {
+		this.pw = res.getWriter();
+		
+		try {
+			if(pdcode != null) {
+				String result = ad.pdcode_select(pdcode);
+				if(result.equals("0")) {
+					this.pw.print("ok");
+				}
+				else {
+					this.pw.print("no");
+				}
+			}
+			else {
+				this.pw.print("value error");
+			}
+		}
+		catch(Exception e) {
+			this.pw.print("DB error");
+		}
+		finally {			
+			this.pw.close();
+		}
+		
+		return null;
+	}
 	
 	//상품등록페이지 -> 신규등록 완료
 	@PostMapping("/admin/prouduct_writeok.do")
-	public String product_writeok(@RequestParam("pdimage") MultipartFile imgs[], HttpServletRequest req) {
-		//System.out.println(dao.getPdorimage());
-		
-		pi.get_imgs(imgs, req);
+	public String product_writeok(@ModelAttribute("pdlist") product_list_dao dao,@RequestParam("pdimage") MultipartFile imgs[], 
+			HttpServletRequest req, HttpServletResponse res) throws Exception{
+		res.setContentType("text/html;charset=utf-8");
 		
 		// 중간을 입력 안하고 보냈을 때 => MultipartFile[field="pdimage", filename=, contentType=application/octet-stream, size=0]
+		pi.save_imgs(imgs, req);
+		int result = ad.pd_insert(dao);
+		
+		this.pw = res.getWriter();
+		try {
+			if(result > 0) {
+				this.pw.print("<script>"
+						+ "alert('정상적으로 상품 등록이 완료 되었습니다.');"
+						+ "location.href = './product_list.do';"
+						+ "</script>");
+			}
+			else {
+				this.pw.print("<script>"
+						+ "alert('데이터베이스 오류로 인하여 상품등록에 실패했습니다.');"
+						+ "history.go(-1);"
+						+ "</script>");
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			this.pw.print("<script>"
+					+ "alert('데이터베이스 오류로 인하여 상품등록에 실패했습니다.');"
+					+ "history.go(-1);"
+					+ "</script>");
+		}
+		finally {
+			this.pw.close();
+		}
 		
 		return null;
 	}
 	
 	//상품관리 클릭 => 상품리스트 페이지 (로그인 제한)
 	@GetMapping("/admin/product_list.do")
-	public String product_list(@SessionAttribute(name="aid", required=false) String aid, HttpServletResponse res) throws Exception{
+	public String product_list(@SessionAttribute(name="aid", required=false) String aid, HttpServletResponse res, Model m) throws Exception{
 		res.setContentType("text/html;charset=utf-8");
 		this.pw = res.getWriter();
 		if(aid == null) {
@@ -215,6 +279,20 @@ public class admin_Controller {
 					+ "</script>");
 			this.pw.close();
 		}
+		else {			
+			try {
+				
+				List<product_list_dao> result = ad.allpd_select();
+				int total = result.size();
+				m.addAttribute("result", result);
+				m.addAttribute("total", total);
+				
+			}
+			catch(Exception e) {
+				m.addAttribute("result", "no"); // 이건 왜 안써먹냐
+			}
+		}
+			
 		return "product_list";
 	}
 	

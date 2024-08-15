@@ -66,9 +66,11 @@ export class enroll_member{
 		}).then(function(b){
 			if(b == "ok"){
 				cktext.innerText = "사용 가능한 아이디입니다.";
+				cktext.style.color = "green";
 			}
 			else{
 				cktext.innerText = "이미 사용 중인 아이디입니다.";
+				cktext.style.color = "red";
 				frm_enroll.aid.focus();
 			}
 			idck = b;

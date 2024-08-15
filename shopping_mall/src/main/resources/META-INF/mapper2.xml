@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Welcome_mall">
 
+<!-- 상품 전체 select -->
+<select id="product_select" resultType="pdlistdao">
+select * from product_list order by pidx desc
+</select>
+
+
+<!-- 상품코드 중복검사 -->
+<select id="product_code" resultType="String">
+select count(pdcode) as ck from product_list where pdcode=#{pdcode}
+</select>
+
+
+<!-- 상품 insert -->
+<insert id="product_insert">
+insert into product_list (pidx, csortcode, pdcode, pdname, pdaddexplan, pdprice, pd_discount,
+pd_disprice, pdstock, is_sale, pdearlyout, pdorimage, pdreimage, pd_detailexplan, pdate) values
+('0', #{csortcode}, #{pdcode}, #{pdname}, #{pdaddexplan}, #{pdprice}, #{pd_discount},
+#{pd_disprice}, #{pdstock}, #{is_sale}, #{pdearlyout}, #{pdorimage}, #{pdreimage}, #{pd_detailexplan}, now())
+</insert>
+
 <delete id="cate_delete">
 delete from cate_list where cidx=#{cidx}
 </delete>
