@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="cr" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <main class="maincss">
 <section>
 <p>상품관리 페이지</p>
@@ -40,10 +41,11 @@
 </cr:when>
 <cr:otherwise>  
 <cr:forEach var="list" items="${result}" varStatus="n">
+<cr:set var="imgs" value="${fn:split(list.getPdreimage(),',')}"/>
     <ul>
         <li><input type="checkbox"></li>
         <li>${list.getPdcode()}</li>
-        <li>이미지</li>
+        <li><img src="../upload/${imgs[0]}"></li>
         <li>${list.getPdname()}</li>
         <li>${list.getCsortcode()}</li>
         <li>${list.getPdprice()}</li> <!-- ,써줘야함 -->

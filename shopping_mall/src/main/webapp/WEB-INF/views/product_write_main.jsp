@@ -66,10 +66,10 @@
         <li>판매 유/무</li>
         <li>
             <label class="product_label">
-            <input type="radio" name="is_sale" value="start" style="vertical-align:-1px;" checked> 판매시작
+            <input type="radio" name="is_sale" value="Y" style="vertical-align:-1px;" checked> 판매시작
             </label>
             <label class="product_label">
-            <input type="radio" name="is_sale" value="end" style="vertical-align:-1px;"> 판매종료
+            <input type="radio" name="is_sale" value="N" style="vertical-align:-1px;"> 판매종료
             </label> <span class="help_text">※ 숫자만 입력하세요. 재고가 0일 경우 soldout이 됩니다.</span>
         </li>
     </ul>

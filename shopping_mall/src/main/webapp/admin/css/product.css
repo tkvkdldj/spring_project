@@ -40,7 +40,9 @@
     height: auto;
     margin-top: 30px;
 }
-.subpage_view2 > ul {
+
+/* 변경 */
+.subpage_view2 > ul:first-of-type {
     width: inherit;
     height: 30px;
     line-height: 30px;
@@ -50,10 +52,8 @@
     justify-content: center;
     align-items: center;
 }
-.subpage_view2 > ul:nth-of-type(1) {
-    background-color: rgb(123, 102, 102);
-}
-.subpage_view2 > ul > li{
+
+.subpage_view2 > ul:first-of-type > li {
     height: 30px;
     line-height: 30px;
     text-align: center;
@@ -64,6 +64,44 @@
     border-left:1px solid rgb(123, 102, 102);
     box-sizing: border-box;
 }
+
+/* 추가 */
+.subpage_view2 > ul:not(:first-of-type) {
+	width: inherit;
+    height: 100px;
+    line-height: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+}
+
+.subpage_view2 > ul:nth-of-type(1) {
+    background-color: rgb(123, 102, 102);
+}
+.subpage_view2 > ul:not(:first-of-type) > li{
+    height: 100px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    line-height: normal;
+    
+    text-align: center;
+    font-size: 13px;
+    font-family: 'Nanum Gothic', sans-serif;
+    border-top:1px solid rgb(123, 102, 102);
+    border-bottom:1px solid rgb(123, 102, 102);
+    border-left:1px solid rgb(123, 102, 102);
+    box-sizing: border-box;
+}
+
+.subpage_view2 > ul:not(:first-of-type) > li > img {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 .subpage_view2 > ul > li:last-of-type{
     border-right:1px solid rgb(123, 102, 102);
 }
