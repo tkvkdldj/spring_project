@@ -1,3 +1,5 @@
+var is_ck = "";
+
 export class send_data{
 
 	//상품코드 난수
@@ -19,6 +21,7 @@ export class send_data{
 	
 	//상품코드 중복 확인
 	ck_isdupli(){
+		/*
 		//중복되었을 시 자동으로 새로고침하는 것 추가
 		this.pdcode = frm_pdwrite.pdcode.value;
 		this.code = "pdcode="+this.pdcode; // 이걸 꼭 해줘야하는 구나
@@ -42,9 +45,37 @@ export class send_data{
 			}
 		}.bind(this)).catch(function(error){
 			console.log("error");
-		});
+		}
+		*/
 	}
-	
+
+/*
+	ck_isdupli(pdcode){
+		//ajax로 날려서 확인
+		this.code = "pdcode="+pdcode; // 이걸 꼭 해줘야하는 구나
+		fetch("./checkpdcode.do",{
+			method : "POST",
+			headers : {"content-type":"application/x-www-form-urlencoded"},
+			body : this.code
+		}).then(function(result_res){
+			return result_res.text();
+			
+		}).then(function(result_data){
+			if(result_data == "ok"){
+				alert("사용 가능한 상품코드 입니다.");
+				is_ck="ck_ok";
+			}
+			else{
+				alert("중복된 상품코드 입니다.");	
+				is_ck="ck_no";
+			}
+			
+		}).catch(function(error){
+			alert("데이터베이스 조회에 문제가 생겼습니다.");
+			is_ck="ck_no";
+		});*/
+
+	/*
 	ck_values(){
 		//값 체크
 		if(frm_pdwrite.pdname.value == "" || frm_pdwrite.pdaddexplan.value == "" ||
@@ -52,13 +83,16 @@ export class send_data{
 			alert("값을 모두 입력해주세요.");
 		}
 		else if(frm_pdwrite.pdimage[0].value == ""){
-			alert("상품 대표이미지는 최소 한 개 이상 첨부하셔야 합니다.")
+			alert("상품 대표이미지는 최소 한 개 이상 첨부하셔야 합니다.");
 		}
 		else if(frm_pdwrite.pdprice.value.indexOf(',') != -1){
 			alert("판매가격은 , 없이 숫자만 입력하셔야 합니다.");
 		}
 		else if(isNaN(frm_pdwrite.pd_discount.value) || isNaN(frm_pdwrite.pdstock.value)){
 			alert("할인율 및 상품재고는 숫자만 입력하셔야 합니다.");	
+		}
+		else if(is_ck == "" || is_ck == "ck_no"){
+			alert("상품코드 중복확인을 해주세요.");	
 		}
 		else{
 			//첨부파일 검사여부 여기서
@@ -80,7 +114,7 @@ export class send_data{
 			else{
 				frm_pdwrite.method = "post";
 				frm_pdwrite.action = "./prouduct_writeok.do";	
-				frm_pdwrite.submit();
+				//frm_pdwrite.submit();
 			}
 		}
 		
@@ -123,7 +157,13 @@ export class send_data{
 			this.discount = frm_pdwrite.pd_discount.value;
 		
 			frm_pdwrite.pd_disprice.value = this.price - (this.price * this.discount * 0.01);	
+
+			frm_pdwrite.method = "post";
+			//frm_pdwrite.action = "./prouduct_writeok.do";	
+			//frm_pdwrite.submit();
+			console.log("상품등록");
+
 		}
 	}
-	
+	*/
 }

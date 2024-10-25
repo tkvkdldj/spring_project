@@ -227,7 +227,29 @@ public class admin_Controller {
 		
 		return null;
 	}
-	
+	/*
+	//상품등록페이지 -> 상품코드 중복체크
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/admin/checkpdcode.do")
+	public String checkpdcode(@RequestParam(defaultValue = "", required = false)String pdcode, HttpServletResponse res) {
+		try {
+			this.pw = res.getWriter();
+			//System.out.println(pdcode);
+			//int result = ad.pdcode_ck(pdcode);
+			int result = 0;
+			if(result == 0) {
+				this.pw.print("ok");
+			}
+			else {
+				this.pw.print("no");
+			}	
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+	*/
 	//상품등록페이지 -> 신규등록 완료
 	@PostMapping("/admin/prouduct_writeok.do")
 	public String product_writeok(@ModelAttribute("pdlist") product_list_dao dao,@RequestParam("pdimage") MultipartFile imgs[], 

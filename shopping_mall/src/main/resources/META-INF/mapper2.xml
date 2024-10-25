@@ -7,9 +7,12 @@
 select * from product_list order by pidx desc
 </select>
 
-
-<!-- 상품코드 중복검사 -->
+<!-- 상품코드 중복검사
 <select id="product_code" resultType="String">
+-->
+
+<!-- 상품코드 중복 확인 -->
+<select id="pdcode_ck" resultType="Integer">
 select count(pdcode) as ck from product_list where pdcode=#{pdcode}
 </select>
 

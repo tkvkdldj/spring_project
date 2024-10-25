@@ -56,6 +56,15 @@ public class admin_dml {
 		return result;
 	}
 
+
+/*
+	//상품코드 중복 확인
+	public int pdcode_ck(String pdcode) {
+		int result = tm.selectOne("Welcome_mall.pdcode_ck", pdcode);
+		return result;
+	}
+*/	
+
 	//카테고리 delete
 	public int cate_delete(String cidx[]) {
 		int count = 0;
